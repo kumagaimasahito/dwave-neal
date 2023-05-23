@@ -18,6 +18,8 @@
 #include <vector>
 #include <stdexcept>
 #include "cpu_sa.h"
+#include <iostream>
+#include <fstream>
 
 // xorshift128+ as defined https://en.wikipedia.org/wiki/Xorshift#xorshift.2B
 #define FASTRAND(rand) do {                       \
@@ -95,6 +97,7 @@ void simulated_annealing_run(
     const int sweeps_per_beta,
     const vector<double>& beta_schedule
 ) {
+    ofstream fps("state.txt");
     const int num_vars = h.size();
 
     // this double array will hold the delta energy for every variable
@@ -168,7 +171,11 @@ void simulated_annealing_run(
                     state[var] *= -1;
                     delta_energy[var] *= -1;
                 }
+                fps << int(state[var]) << "\t";
+                cout << int(state[var]) << "\t";
             }
+            fps << endl;
+            cout << endl;
         }
     }
 
