@@ -88,4 +88,8 @@ class load_clustering_ising:
         return self.ref_en
     
     def calc_en(self, state):
+<<<<<<< HEAD
         return state @ self.J_mat @ state + self.h_vec @ state
+=======
+        return state @ self.J_mat @ state.T + self.h_vec @ state.T
+>>>>>>> 89c8ff0090a7f587fa19a3cd13c490d058e7cf63
