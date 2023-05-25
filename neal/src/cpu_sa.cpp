@@ -18,7 +18,7 @@
 #include <vector>
 #include <stdexcept>
 #include "cpu_sa.h"
-#include <iostream>
+// #include <iostream>
 #include <fstream>
 
 // xorshift128+ as defined https://en.wikipedia.org/wiki/Xorshift#xorshift.2B
@@ -171,11 +171,14 @@ void simulated_annealing_run(
                     state[var] *= -1;
                     delta_energy[var] *= -1;
                 }
+            }
+
+            for (int var = 0; var < num_vars; var++) {
                 fps << int(state[var]) << "\t";
-                cout << int(state[var]) << "\t";
+                // cout << int(state[var]) << "\t";
             }
             fps << endl;
-            cout << endl;
+            // cout << endl;
         }
     }
 
