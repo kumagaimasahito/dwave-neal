@@ -177,18 +177,11 @@ void simulated_annealing_run(
 
             for (int var = 0; var < num_vars; var++) {
                 fps << int(state[var]) << "\t";
-<<<<<<< HEAD
                 fpf << exp(-delta_energy[var]*beta) << "\t";
             }
             fps << endl;
             fpf << endl;
             fpb << beta << "\t";
-=======
-                // cout << int(state[var]) << "\t";
-            }
-            fps << endl;
-            // cout << endl;
->>>>>>> 89c8ff0090a7f587fa19a3cd13c490d058e7cf63
         }
     }
 
