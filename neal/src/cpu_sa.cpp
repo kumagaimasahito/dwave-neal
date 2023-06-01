@@ -100,6 +100,7 @@ void simulated_annealing_run(
     ofstream fps("state.txt");
     ofstream fpf("p_flip.txt");
     ofstream fpb("beta.txt");
+    ofstream fpe("energy.txt");
     const int num_vars = h.size();
 
     // this double array will hold the delta energy for every variable
@@ -182,6 +183,15 @@ void simulated_annealing_run(
             fps << endl;
             fpf << endl;
             fpb << beta << "\t";
+            double current_energy = 0.0
+            for (int var = 0; var < num_vars; var++) {
+                current_energy += state[var] * h[var];
+                for (int n_i = 0; n_i < degrees[var]; n_i++) {
+                    int neighbor = neighbors[var][n_i];
+                    current_energy += state[var] * neighbour_couplings[var][n_i] * state[neighbor]
+                }
+            }
+            fpb << current_energy << "\t";
         }
     }
 
