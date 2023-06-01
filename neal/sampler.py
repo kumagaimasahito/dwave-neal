@@ -352,6 +352,18 @@ class SimulatedAnnealingSampler(dimod.Sampler, dimod.Initialized):
 
         response.change_vartype(original_vartype, inplace=True)
 
+        response.trajectory = {
+            "states": np.loadtxt("state.txt"),
+            "p_flip": np.loadtxt("p_flip.txt"),
+            "beta": np.loadtxt("beta.txt"),
+            "energies": np.loadtxt("energy.txt")
+        }
+
+        response.best_solution = {
+            "energy": response.trajectory["energies"].min(),
+            "state": response.trajectory["states"][response.trajectory["energies"].argmin()]
+        }
+
         return response
 
 
