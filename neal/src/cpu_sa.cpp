@@ -100,6 +100,8 @@ void simulated_annealing_run(
     ofstream fpf("p_flip.txt");
     ofstream fpb("beta.txt");
     ofstream fpe("energy.txt");
+    ofstream fph("h_sche.txt");
+    ofstream fpe2("e_sche.txt");
     const int num_vars = h.size();
 
     // this double array will hold the delta energy for every variable
@@ -108,18 +110,27 @@ void simulated_annealing_run(
 
     uint64_t rand; // this will hold the value of the rng
 
-    // build the delta_energy array by getting the delta energy for each
-    // variable
-    for (int var = 0; var < num_vars; var++) {
-        delta_energy[var] = get_flip_energy(var, state, h, degrees,
-                                            neighbors, neighbour_couplings);
-    }
+    double beta_fin = beta_schedule.back();
 
     bool flip_spin;
     // perform the sweeps
     for (int beta_idx = 0; beta_idx < (int)beta_schedule.size(); beta_idx++) {
         // get the beta value for this sweep
         const double beta = beta_schedule[beta_idx];
+        
+        // rescale absolute values of h
+        vector<double> h_tmp(num_vars, 0);
+        for (int var = 0; var < num_vars; var++) {
+            h_tmp[var] = h[var] * beta / beta_fin;
+        }
+
+        // build the delta_energy array by getting the delta energy for each
+        // variable
+        for (int var = 0; var < num_vars; var++) {
+            delta_energy[var] = get_flip_energy(var, state, h_tmp, degrees,
+                                                neighbors, neighbour_couplings);
+        }
+
         for (int sweep = 0; sweep < sweeps_per_beta; sweep++) {
 
             // this threshold will allow us to skip the metropolis update for
@@ -178,21 +189,29 @@ void simulated_annealing_run(
             for (int var = 0; var < num_vars; var++) {
                 fps << int(state[var]) << "\t";
                 fpf << exp(-delta_energy[var]*beta) << "\t";
+                fph << h_tmp[var] << "\t";
             }
+
             fps << endl;
             fpf << endl;
+            fph << endl;
             fpb << beta << "\t";
+
             double current_energy = 0.0;
+            double current_e_sche = 0.0;
             for (int var = 0; var < num_vars; var++) {
                 current_energy += state[var] * h[var];
+                current_e_sche += state[var] * h_tmp[var];
                 for (int n_i = 0; n_i < degrees[var]; n_i++) {
                     int neighbor = neighbors[var][n_i];
                     if (var < neighbor) {
                         current_energy += state[var] * neighbour_couplings[var][n_i] * state[neighbor];
+                        current_e_sche += state[var] * neighbour_couplings[var][n_i] * state[neighbor];
                     }
                 }
             }
             fpe << current_energy << "\t";
+            fpe2 << current_e_sche << "\t";
         }
     }
 

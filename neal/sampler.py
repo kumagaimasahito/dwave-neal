@@ -356,7 +356,9 @@ class SimulatedAnnealingSampler(dimod.Sampler, dimod.Initialized):
             "states": np.loadtxt("state.txt"),
             "p_flip": np.loadtxt("p_flip.txt"),
             "beta": np.loadtxt("beta.txt"),
-            "energies": np.loadtxt("energy.txt")
+            "h_sche": np.loadtxt("h_sche.txt"),
+            "energies": np.loadtxt("energy.txt"),
+            "e_sche": np.loadtxt("e_sche.txt")
         }
 
         response.best_solution = {
